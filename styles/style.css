@@ -15,7 +15,7 @@ html, body {
     position: fixed;
     inset: 0;
 
-    background: #000; /* 🔥 مهم جدًا */
+   background: #f1e8cf;
     z-index: 9999;
 
     overflow: hidden;
@@ -38,7 +38,7 @@ html, body {
     z-index: 1;
 
     /* 🔥 أهم تعديل */
-    background: #000;
+   background: #f1e8cf;
 
     /* تحسين iOS rendering */
     -webkit-transform: translateZ(0);
