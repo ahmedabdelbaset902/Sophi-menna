@@ -37,7 +37,7 @@ music?.addEventListener("pause", () => {
 });
 
 /* =========================
-   VIDEO FIX (SAFE MODE)
+   VIDEO FIX (iOS SAFE)
 ========================= */
 if (introVideo) {
 
@@ -46,8 +46,10 @@ if (introVideo) {
     introVideo.setAttribute("playsinline", "");
     introVideo.setAttribute("webkit-playsinline", "");
 
-    // 🔥 مهم جدًا iPhone
     introVideo.preload = "auto";
+
+    // 🔥 مهم: جهّز أول frame
+    introVideo.load();
 }
 
 /* =========================
@@ -61,15 +63,21 @@ document.addEventListener("click", async () => {
 
     try {
 
-        // ❌ مفيش load() (ده اللي كان بيكسر iPhone)
-        
-        introVideo.currentTime = 0.01;
+        introVideo.muted = true;
 
-        const playPromise = introVideo.play();
+        // ❌ ممنوع currentTime على iOS هنا
+        // introVideo.currentTime = 0.01;  ← اتحذفت
 
-        if (playPromise !== undefined) {
-            await playPromise;
-        }
+        // استنى الفيديو يبقى ready
+        await new Promise((resolve) => {
+            if (introVideo.readyState >= 2) {
+                resolve();
+            } else {
+                introVideo.addEventListener("canplay", resolve, { once: true });
+            }
+        });
+
+        await introVideo.play();
 
     } catch (e) {
         console.log("video play failed", e);
